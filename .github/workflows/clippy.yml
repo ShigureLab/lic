@@ -1,4 +1,4 @@
-name: Test
+name: clippy
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -11,8 +11,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Update rust toolchain
-        run: rustup update
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: clippy
       - uses: actions/cache@v2
         id: cargo-cache
         with:
@@ -23,10 +28,8 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Build
-        if: steps.cargo-cache.outputs.cache-hit != 'true'
-        run: cargo build --release --verbose
-      - name: Run tests
-        run: cargo test --release --verbose
-      - name: E2E test
-        run: cargo run --release -- new MIT --width 80
+      - name: Clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -q --release -- --no-deps

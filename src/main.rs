@@ -21,9 +21,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 print!("{}", text);
             }
             None => {
-                eprintln!("Unknown license: {}.", options.name.blue().bold());
+                eprintln!("Unknown license id: {}.", options.name.blue().bold());
                 eprintln!(
-                    "Are you mean {}?",
+                    "Did you mean {}?",
                     licenses
                         .similar_licenses_id(&options.name, 5)
                         .iter()

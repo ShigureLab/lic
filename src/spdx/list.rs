@@ -32,26 +32,22 @@ pub async fn get_licenses() -> Result<Licenses, reqwest::Error> {
 
 impl Licenses {
     #[allow(dead_code)]
-    pub fn contains(&self, id: &String) -> bool {
-        let license_ids: Vec<_> = self
-            .licenses
+    pub fn contains(&self, id: &str) -> bool {
+        self.licenses
             .iter()
             .map(|license| license.license_id.clone())
-            .collect();
-        license_ids.contains(id)
+            .any(|x| x == *id)
     }
 
     #[allow(dead_code)]
-    pub fn contains_case_insensitive(&self, id: &String) -> bool {
-        let license_ids: Vec<_> = self
-            .licenses
+    pub fn contains_case_insensitive(&self, id: &str) -> bool {
+        self.licenses
             .iter()
             .map(|license| license.license_id.clone().to_lowercase())
-            .collect();
-        license_ids.contains(&id.to_lowercase())
+            .any(|x| x == id.to_lowercase())
     }
 
-    pub fn similar_licenses_id(&self, id: &String, num: usize) -> Vec<String> {
+    pub fn similar_licenses_id(&self, id: &str, num: usize) -> Vec<String> {
         let mut license_similar_ranks: Vec<_> = self
             .licenses
             .iter()
@@ -73,18 +69,18 @@ impl Licenses {
     }
 
     #[allow(dead_code)]
-    pub fn get_license(&self, id: &String) -> Option<&License> {
+    pub fn get_license(&self, id: &str) -> Option<&License> {
         for license in &self.licenses {
-            if &license.license_id == id {
+            if license.license_id == id {
                 return Some(license);
             }
         }
         None
     }
 
-    pub fn get_license_case_insensitive(&self, id: &String) -> Option<&License> {
+    pub fn get_license_case_insensitive(&self, id: &str) -> Option<&License> {
         for license in &self.licenses {
-            if &license.license_id.to_lowercase() == &id.to_lowercase() {
+            if license.license_id.to_lowercase() == id.to_lowercase() {
                 return Some(license);
             }
         }
