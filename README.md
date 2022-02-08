@@ -14,9 +14,16 @@ cargo install lic
 lic new MIT --width 80 > LICENSE
 ```
 
+Automaticly detect license field from package manager manifest.
+
+-  Node.js: `package.json`
+-  Rust: `Cargo.toml`
+-  Python Poetry: `pyproject.toml`
+
+```bash
+lic auto --width 80
+```
+
 ## TODO List
 
--  [ ] 子命令 `auto`，自动检测各种语言配置文件的 `license` 字段进行生成
-   -  [ ] `package.json`
-   -  [ ] `pyproject.toml`
-   -  [ ] `Cargo.toml`
+-  [ ] `auto` 时如果当前层找不到的话向上层查找试试

@@ -3,3 +3,7 @@
 
 # macOS
 .DS_Store
+
+# test files
+package.json
+pyproject.toml

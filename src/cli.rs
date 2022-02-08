@@ -14,6 +14,7 @@ pub struct Cli {
 #[derive(Subcommand, Debug, PartialEq)]
 pub enum Commands {
     New(OptionsNew),
+    Auto(OptionsAuto),
 }
 
 #[derive(Parser, Debug, PartialEq)]
@@ -22,6 +23,15 @@ pub struct OptionsNew {
 
     #[clap(short, long)]
     pub width: Option<usize>,
+}
+
+#[derive(Parser, Debug, PartialEq)]
+pub struct OptionsAuto {
+    #[clap(short, long)]
+    pub width: Option<usize>,
+
+    #[clap(short, long)]
+    pub force: bool,
 }
 
 #[cfg(test)]
@@ -36,6 +46,18 @@ mod tests {
             Commands::New(OptionsNew {
                 name: "MIT".into(),
                 width: None
+            })
+        );
+    }
+
+    #[test]
+    fn test_auto() {
+        let cli = Cli::parse_from(&["lic", "auto", "-w", "80"]);
+        assert_eq!(
+            cli.command,
+            Commands::Auto(OptionsAuto {
+                width: Some(80),
+                force: false
             })
         );
     }

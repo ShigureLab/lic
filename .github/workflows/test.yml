@@ -29,4 +29,6 @@ jobs:
       - name: Run tests
         run: cargo test --release --verbose
       - name: E2E test
-        run: cargo run --release -- new MIT --width 80
+        run: |
+          cargo run --release -- new MIT --width 80
+          cargo run --release -- auto --width 80 -f
