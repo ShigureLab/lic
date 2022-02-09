@@ -25,6 +25,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 if let Some(max_width) = options.width {
                     text = textwrap::fill(&text, max_width)
                 }
+                if lic.is_deprecated_license_id {
+                    eprintln!("{badge_warning} This license id has been deprecated.");
+                }
                 print!("{}", text);
             }
             None => {
