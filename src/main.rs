@@ -19,7 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let badge_warning = " WARN ".black().on_yellow();
 
     match cli.command {
-        Commands::New(options) => match licenses.get_license_case_insensitive(&options.name) {
+        Commands::New(options) => match licenses.get_license_case_insensitive(&options.id) {
             Some(lic) => {
                 let mut text = lic.get_details().await?.license_text;
                 if let Some(max_width) = options.width {
@@ -33,14 +33,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             None => {
                 eprintln!(
                     "{badge_error} Unknown license id: {}.",
-                    options.name.blue().bold()
+                    options.id.blue().bold()
                 );
                 eprintln!(
                     "Did you mean {}?",
                     licenses
-                        .similar_licenses_id(&options.name, 5)
+                        .similar_licenses(&options.id, 5)
                         .iter()
-                        .map(|id| id.green().bold().to_string())
+                        .map(|license| if license.is_deprecated_license_id {
+                            license.license_id.yellow().to_string()
+                        } else {
+                            license.license_id.green().bold().to_string()
+                        })
                         .collect::<Vec<_>>()
                         .join(", ")
                 );
@@ -78,6 +82,45 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     None => println!("{badge_error} Unknown license id: {}.", lic.blue().bold()),
                 },
                 None => println!("{badge_error} Cannot find the manifest file."),
+            }
+        }
+        Commands::Search(options) => {
+            let similar_licenses = licenses.similar_licenses(&options.id, options.number);
+            let license_id_width = similar_licenses
+                .iter()
+                .map(|lic| lic.license_id.len())
+                .max()
+                .unwrap()
+                + 2;
+            let license_name_width = similar_licenses
+                .iter()
+                .map(|lic| lic.name.len())
+                .max()
+                .unwrap()
+                + 2;
+            println!(
+                "{:^license_id_width$} {:^license_name_width$} {:^12} {:^12}",
+                "License id".green(),
+                "License name".blue(),
+                "Deprecated".yellow(),
+                "OSI Approved".purple(),
+                license_id_width = license_id_width,
+                license_name_width = license_name_width,
+            );
+            for license in similar_licenses {
+                println!(
+                    "{:license_id_width$} {:license_name_width$} {:^12} {:^12}",
+                    license.license_id.green(),
+                    license.name.blue(),
+                    if license.is_deprecated_license_id {
+                        "✔"
+                    } else {
+                        ""
+                    },
+                    if license.is_osi_approved { "✔" } else { "" },
+                    license_id_width = license_id_width,
+                    license_name_width = license_name_width,
+                );
             }
         }
     }

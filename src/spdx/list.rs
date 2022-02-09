@@ -2,7 +2,7 @@ use super::details::{get_details, LicenseDetails};
 use serde::Deserialize;
 use strsim::jaro_winkler;
 
-#[derive(Deserialize, PartialEq, Debug)]
+#[derive(Deserialize, PartialEq, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Licenses {
     pub license_list_version: String,
@@ -10,7 +10,7 @@ pub struct Licenses {
     pub release_date: String,
 }
 
-#[derive(Deserialize, PartialEq, Debug)]
+#[derive(Deserialize, PartialEq, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct License {
     reference: String,
@@ -20,7 +20,7 @@ pub struct License {
     pub name: String,
     pub license_id: String,
     see_also: Vec<String>,
-    is_osi_approved: bool,
+    pub is_osi_approved: bool,
     is_fsf_libre: Option<bool>,
 }
 
@@ -47,24 +47,24 @@ impl Licenses {
             .any(|x| x == id.to_lowercase())
     }
 
-    pub fn similar_licenses_id(&self, id: &str, num: usize) -> Vec<String> {
-        let mut license_similar_ranks: Vec<_> = self
+    pub fn similar_licenses(&self, id: &str, num: usize) -> Vec<License> {
+        let mut license_with_similarity: Vec<_> = self
             .licenses
             .iter()
             .map(|license| {
                 (
-                    license.license_id.clone(),
                     jaro_winkler(
                         &license.license_id.clone().to_lowercase(),
                         &id.to_lowercase(),
                     ),
+                    license,
                 )
             })
             .collect();
-        license_similar_ranks.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
-        license_similar_ranks[0..num]
+        license_with_similarity.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap());
+        license_with_similarity[0..num]
             .iter()
-            .map(|(id, _)| id.clone())
+            .map(|(_, license)| license.to_owned().clone())
             .collect()
     }
 

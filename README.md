@@ -24,6 +24,12 @@ Automaticly detect license field from package manager manifest.
 lic auto --width 80
 ```
 
+Search licenses from spdx list.
+
+```bash
+lic search gpl --number 20
+```
+
 ## TODO List
 
 -  [ ] `auto` 时如果当前层找不到的话向上层查找试试

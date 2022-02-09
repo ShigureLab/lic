@@ -15,11 +15,12 @@ pub struct Cli {
 pub enum Commands {
     New(OptionsNew),
     Auto(OptionsAuto),
+    Search(OptionsSearch),
 }
 
 #[derive(Parser, Debug, PartialEq)]
 pub struct OptionsNew {
-    pub name: String,
+    pub id: String,
 
     #[clap(short, long)]
     pub width: Option<usize>,
@@ -34,6 +35,14 @@ pub struct OptionsAuto {
     pub force: bool,
 }
 
+#[derive(Parser, Debug, PartialEq)]
+pub struct OptionsSearch {
+    pub id: String,
+
+    #[clap(short, long, default_value_t = 20)]
+    pub number: usize,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -44,7 +53,7 @@ mod tests {
         assert_eq!(
             cli.command,
             Commands::New(OptionsNew {
-                name: "MIT".into(),
+                id: "MIT".into(),
                 width: None
             })
         );
@@ -58,6 +67,18 @@ mod tests {
             Commands::Auto(OptionsAuto {
                 width: Some(80),
                 force: false
+            })
+        );
+    }
+
+    #[test]
+    fn test_search() {
+        let cli = Cli::parse_from(&["lic", "search", "gpl", "-n", "50"]);
+        assert_eq!(
+            cli.command,
+            Commands::Search(OptionsSearch {
+                id: String::from("gpl"),
+                number: 50
             })
         );
     }
