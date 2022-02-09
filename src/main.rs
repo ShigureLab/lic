@@ -15,6 +15,8 @@ use std::path::Path;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let licenses = get_licenses().await?;
     let cli = Cli::parse();
+    let badge_error = " ERROR ".black().on_red().bold();
+    let badge_warning = " WARN ".black().on_yellow();
 
     match cli.command {
         Commands::New(options) => match licenses.get_license_case_insensitive(&options.name) {
@@ -26,7 +28,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 print!("{}", text);
             }
             None => {
-                eprintln!("Unknown license id: {}.", options.name.blue().bold());
+                eprintln!(
+                    "{badge_error} Unknown license id: {}.",
+                    options.name.blue().bold()
+                );
                 eprintln!(
                     "Did you mean {}?",
                     licenses
@@ -61,16 +66,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         }
                         let license_path = Path::new("LICENSE");
                         if license_path.exists() && !options.force {
-                            println!("The file LICENSE already exists, you may need the {} option to force an override.", "--force".blue())
+                            println!("{badge_warning} The file LICENSE already exists, you may need the {} option to force an override.", "--force".blue())
                         } else {
                             let mut file = File::create(license_path)?;
-                            // file.write_all(b"Hello, world!")?;
                             file.write_all(text.as_bytes())?;
                         }
                     }
-                    None => println!("Unknown license id: {}.", lic.blue().bold()),
+                    None => println!("{badge_error} Unknown license id: {}.", lic.blue().bold()),
                 },
-                None => println!("Cannot find the manifest file."),
+                None => println!("{badge_error} Cannot find the manifest file."),
             }
         }
     }
