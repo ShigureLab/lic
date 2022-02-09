@@ -7,9 +7,9 @@
   dependencyDashboardTitle: "☑️ Dependency Dashboard",
   packageRules: [
     {
+      groupName: "dependencies (non-major)",
       matchUpdateTypes: ["minor", "patch", "pin", "digest"],
       automerge: true,
-      automergeType: "pr",
       automergeStrategy: "squash",
     },
   ],
