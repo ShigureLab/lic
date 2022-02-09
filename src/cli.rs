@@ -3,7 +3,7 @@ use clap::{AppSettings, Parser, Subcommand};
 #[derive(Parser, Debug, PartialEq)]
 #[clap(name = "lic")]
 #[clap(author = "Nyakku Shigure <sigure.qaq@gmail.com>")]
-#[clap(version = "0.2.0")]
+#[clap(version = "0.2.1")]
 #[clap(about = "A SPDX license generator.")]
 #[clap(global_setting(AppSettings::AllowNegativeNumbers))]
 pub struct Cli {
