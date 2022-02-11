@@ -122,7 +122,7 @@ mod tests {
                 reference: String::from("https://spdx.org/licenses/LGPL-3.0.html"),
                 is_deprecated_license_id: true,
                 details_url: String::from("https://spdx.org/licenses/LGPL-3.0.json"),
-                reference_number: 483 as u32,
+                reference_number: 483,
                 name: String::from("GNU Lesser General Public License v3.0 only"),
                 license_id: String::from("LGPL-3.0"),
                 see_also: vec![
@@ -157,7 +157,7 @@ mod tests {
                 reference: String::from("https://spdx.org/licenses/CC-BY-NC-SA-4.0.html"),
                 is_deprecated_license_id: false,
                 details_url: String::from("https://spdx.org/licenses/CC-BY-NC-SA-4.0.json"),
-                reference_number: 97 as u32,
+                reference_number: 97,
                 name: String::from(
                     "Creative Commons Attribution Non Commercial Share Alike 4.0 International"
                 ),
@@ -201,7 +201,7 @@ mod tests {
                     reference: String::from("https://spdx.org/licenses/CC-BY-NC-SA-4.0.html"),
                     is_deprecated_license_id: false,
                     details_url: String::from("https://spdx.org/licenses/CC-BY-NC-SA-4.0.json"),
-                    reference_number: 97 as u32,
+                    reference_number: 97,
                     name: String::from(
                         "Creative Commons Attribution Non Commercial Share Alike 4.0 International"
                     ),
