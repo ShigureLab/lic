@@ -21,6 +21,6 @@ reqwest = { version = "0.11.9", features = ["json"] }
 serde = { version = "1.0.136", features = ["derive"] }
 serde_json = "1.0.79"
 strsim = "0.10.0"
-textwrap = "0.14.2"
+textwrap = "0.15.0"
 tokio = { version = "1.17.0", features = ["full"] }
 toml = "0.5.8"
