@@ -1,11 +1,11 @@
-use clap::{AppSettings, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug, PartialEq)]
 #[clap(name = "lic")]
 #[clap(author = "Nyakku Shigure <sigure.qaq@gmail.com>")]
 #[clap(version = "0.3.0")]
 #[clap(about = "A SPDX license generator.")]
-#[clap(global_setting(AppSettings::AllowNegativeNumbers))]
+#[clap(allow_negative_numbers = true)]
 pub struct Cli {
     #[clap(subcommand)]
     pub command: Commands,
