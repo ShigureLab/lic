@@ -18,7 +18,7 @@ jobs:
           toolchain: stable
           override: true
           components: clippy
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: cargo-cache
         with:
           path: |
