@@ -1,3 +1,6 @@
+# CI pipeline based on:
+# - https://github.com/ClementTsang/bottom/blob/master/.github/workflows/ci.yml
+
 name: build
 
 on: [push, pull_request, workflow_dispatch]
@@ -5,38 +8,85 @@ on: [push, pull_request, workflow_dispatch]
 env:
   CARGO_TERM_COLOR: always
 
-strategy:
-  matrix:
-    include:
-      - build: linux
-        os: ubuntu-latest
-      - build: macos
-        os: macos-latest
-
 jobs:
   run-build:
     runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        triple:
+          # x86 or x64
+          - {
+              os: "ubuntu-latest",
+              target: "x86_64-unknown-linux-gnu",
+              cross: false,
+              rust: stable,
+            }
+          - {
+              os: "ubuntu-latest",
+              target: "x86_64-unknown-linux-musl",
+              cross: false,
+              rust: stable,
+            }
+          - {
+              os: "macOS-latest",
+              target: "x86_64-apple-darwin",
+              cross: false,
+              rust: stable,
+            }
+          - {
+              os: "windows-2019",
+              target: "x86_64-pc-windows-msvc",
+              cross: false,
+              rust: stable,
+            }
+
+          # aarch64
+          - {
+              os: "ubuntu-latest",
+              target: "aarch64-unknown-linux-gnu",
+              cross: true,
+              rust: stable,
+            }
+
+          # armv7
+          - {
+              os: "ubuntu-latest",
+              target: "armv7-unknown-linux-gnueabihf",
+              cross: true,
+              rust: stable,
+            }
+
+          # Risc-V 64gc
+          - {
+              os: "ubuntu-latest",
+              target: "riscv64gc-unknown-linux-gnu",
+              cross: true,
+              rust: stable,
+            }
+
+          # macOS ARM
+          - {
+              os: "macOS-latest",
+              target: "aarch64-apple-darwin",
+              cross: true,
+              rust: stable,
+            }
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: stable
+          toolchain: ${{ matrix.triple.rust }}
           override: true
-      - uses: actions/cache@v3
-        id: cargo-cache
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Clippy
+          target: ${{ matrix.triple.target }}
+
+      - name: Build
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release
+          args: --all-targets --verbose --target=${{ matrix.triple.target }}
+          use-cross: ${{ matrix.triple.cross }}
