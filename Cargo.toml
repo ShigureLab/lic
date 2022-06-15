@@ -15,7 +15,7 @@ keywords = ["spdx", "license", "cli"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "3.2.4", features = ["derive"] }
+clap = { version = "3.2.5", features = ["derive"] }
 colored = "2.0.0"
 reqwest = { version = "0.11.11", features = ["json"] }
 serde = { version = "1.0.137", features = ["derive"] }
