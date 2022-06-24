@@ -1,7 +1,7 @@
 [package]
 name = "lic"
 # release 新版本时记得同时修改 src/cli 里的版本
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 authors = ["Nyakku Shigure"]
 rust-version = "1.58.0"
