@@ -106,9 +106,9 @@ mod tests {
             "isWayBackLink": false,
             "order": 0
         }"#;
-        let corss_ref: CrossRef = serde_json::from_str(data).unwrap();
+        let cross_ref: CrossRef = serde_json::from_str(data).unwrap();
         assert_eq!(
-            corss_ref,
+            cross_ref,
             CrossRef {
                 match_: String::from("false"),
                 url: String::from("https://opensource.org/licenses/MIT"),
