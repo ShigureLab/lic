@@ -19,8 +19,8 @@ clap = { version = "4.4.2", features = ["derive"] }
 colored = "2.0.4"
 reqwest = { version = "0.11.20", features = ["json"] }
 serde = { version = "1.0.188", features = ["derive"] }
-serde_json = "1.0.105"
+serde_json = "1.0.106"
 strsim = "0.10.0"
 textwrap = "0.16.0"
 tokio = { version = "1.32.0", features = ["full"] }
-toml = "0.7.6"
+toml = "0.7.8"
