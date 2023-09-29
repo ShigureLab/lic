@@ -5,7 +5,7 @@ mod spdx;
 use clap::Parser;
 use cli::{Cli, Commands};
 use colored::*;
-use manifest::{CargoToml, Manifest, PackageJson, PyprojectToml};
+use manifest::{CargoToml, Manifest, ManifestError, PackageJson, PyprojectToml};
 use spdx::list::get_licenses;
 use std::fs::File;
 use std::io::prelude::*;
@@ -53,19 +53,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Auto(options) => {
             let lic = if let Some(text) = CargoToml::read() {
                 let manifest = CargoToml::from_str(&text);
-                Some(manifest.license())
+                manifest.and_then(|manifest| manifest.license())
             } else if let Some(text) = PyprojectToml::read() {
                 let manifest = PyprojectToml::from_str(&text);
-                Some(manifest.license())
+                manifest.and_then(|manifest| manifest.license())
             } else if let Some(text) = PackageJson::read() {
                 let manifest = PackageJson::from_str(&text);
-                Some(manifest.license())
+                manifest.and_then(|manifest| manifest.license())
             } else {
-                None
+                Err(ManifestError::FileNotFound)
             };
 
             match lic {
-                Some(lic) => match licenses.get_license_case_insensitive(&lic) {
+                Ok(lic) => match licenses.get_license_case_insensitive(&lic) {
                     Some(lic) => {
                         let mut text = lic.get_details().await?.license_text;
                         if let Some(max_width) = options.width {
@@ -81,7 +81,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                     None => println!("{badge_error} Unknown license id: {}.", lic.blue().bold()),
                 },
-                None => println!("{badge_error} Cannot find the manifest file."),
+                Err(e) => match e {
+                    ManifestError::ParseError => {
+                        println!("{badge_error} Cannot parse the manifest file.")
+                    }
+                    ManifestError::LicenseNotFound => {
+                        println!("{badge_error} Cannot find the license id in the manifest file.")
+                    }
+                    ManifestError::FileNotFound => {
+                        println!("{badge_error} Cannot find the manifest file.")
+                    }
+                },
             }
         }
         Commands::Search(options) => {
