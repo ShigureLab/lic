@@ -18,7 +18,7 @@ Automaticly detect license field from package manager manifest.
 
 -  Node.js: `package.json`
 -  Rust: `Cargo.toml`
--  Python Poetry: `pyproject.toml`
+-  Python: `pyproject.toml` (PEP 621 and poetry)
 
 ```bash
 lic auto --width 80
