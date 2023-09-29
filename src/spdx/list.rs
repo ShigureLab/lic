@@ -70,21 +70,15 @@ impl Licenses {
 
     #[allow(dead_code)]
     pub fn get_license(&self, id: &str) -> Option<&License> {
-        for license in &self.licenses {
-            if license.license_id == id {
-                return Some(license);
-            }
-        }
-        None
+        self.licenses
+            .iter()
+            .find(|&license| license.license_id == id)
     }
 
     pub fn get_license_case_insensitive(&self, id: &str) -> Option<&License> {
-        for license in &self.licenses {
-            if license.license_id.to_lowercase() == id.to_lowercase() {
-                return Some(license);
-            }
-        }
-        None
+        self.licenses
+            .iter()
+            .find(|&license| license.license_id.to_lowercase() == id.to_lowercase())
     }
 }
 

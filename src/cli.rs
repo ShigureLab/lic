@@ -49,7 +49,7 @@ mod tests {
 
     #[test]
     fn test_new() {
-        let cli = Cli::parse_from(&["lic", "new", "MIT"]);
+        let cli = Cli::parse_from(["lic", "new", "MIT"]);
         assert_eq!(
             cli.command,
             Commands::New(OptionsNew {
@@ -61,7 +61,7 @@ mod tests {
 
     #[test]
     fn test_auto() {
-        let cli = Cli::parse_from(&["lic", "auto", "-w", "80"]);
+        let cli = Cli::parse_from(["lic", "auto", "-w", "80"]);
         assert_eq!(
             cli.command,
             Commands::Auto(OptionsAuto {
@@ -73,7 +73,7 @@ mod tests {
 
     #[test]
     fn test_search() {
-        let cli = Cli::parse_from(&["lic", "search", "gpl", "-n", "50"]);
+        let cli = Cli::parse_from(["lic", "search", "gpl", "-n", "50"]);
         assert_eq!(
             cli.command,
             Commands::Search(OptionsSearch {
