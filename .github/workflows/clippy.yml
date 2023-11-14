@@ -12,11 +12,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install toolchain
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
           toolchain: stable
-          override: true
           components: clippy
       - uses: actions/cache@v3
         id: cargo-cache
