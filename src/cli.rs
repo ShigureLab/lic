@@ -1,13 +1,10 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug, PartialEq)]
-#[clap(name = "lic")]
-#[clap(author = "Nyakku Shigure <sigure.qaq@gmail.com>")]
-#[clap(version = "0.4.0")]
-#[clap(about = "A SPDX license generator.")]
-#[clap(allow_negative_numbers = true)]
+#[command(author, version, about, long_about = None)]
+#[command(allow_negative_numbers = true)]
 pub struct Cli {
-    #[clap(subcommand)]
+    #[command(subcommand)]
     pub command: Commands,
 }
 
@@ -22,16 +19,16 @@ pub enum Commands {
 pub struct OptionsNew {
     pub id: String,
 
-    #[clap(short, long)]
+    #[arg(short, long)]
     pub width: Option<usize>,
 }
 
 #[derive(Parser, Debug, PartialEq)]
 pub struct OptionsAuto {
-    #[clap(short, long)]
+    #[arg(short, long)]
     pub width: Option<usize>,
 
-    #[clap(short, long)]
+    #[arg(short, long)]
     pub force: bool,
 }
 
@@ -39,7 +36,7 @@ pub struct OptionsAuto {
 pub struct OptionsSearch {
     pub id: String,
 
-    #[clap(short, long, default_value_t = 20)]
+    #[arg(short, long, default_value_t = 20)]
     pub number: usize,
 }
 
