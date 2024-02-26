@@ -17,8 +17,8 @@ keywords = ["spdx", "license", "cli"]
 clap = { version = "4.5.1", features = ["derive"] }
 colored = "2.1.0"
 reqwest = { version = "0.11.24", features = ["json"] }
-serde = { version = "1.0.196", features = ["derive"] }
-serde_json = "1.0.113"
+serde = { version = "1.0.197", features = ["derive"] }
+serde_json = "1.0.114"
 strsim = "0.11.0"
 textwrap = "0.16.1"
 tokio = { version = "1.36.0", features = ["full"] }
