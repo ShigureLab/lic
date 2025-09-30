@@ -26,7 +26,7 @@ jobs:
             target: "x86_64-apple-darwin"
             cross: false
             rust: stable
-          - os: "windows-2019"
+          - os: "windows-latest"
             target: "x86_64-pc-windows-msvc"
             cross: false
             rust: stable
@@ -36,7 +36,7 @@ jobs:
             target: "aarch64-apple-darwin"
             cross: true
             rust: stable
-          - os: "windows-2019"
+          - os: "windows-latest"
             target: "aarch64-pc-windows-msvc"
             cross: true
             rust: stable
